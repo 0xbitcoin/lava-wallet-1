@@ -1,22 +1,30 @@
-var _0xBitcoinToken = artifacts.require("./_0xBitcoinToken.sol");
+var Token = artifacts.require("./TestToken.sol");
 
-var ECRecovery = artifacts.require("./ECRecovery.sol");
 
 var LavaWallet = artifacts.require("./LavaWallet.sol");
+
+var RemoteCall = artifacts.require("./RemoteCall.sol");
+
 
 module.exports = function(deployer) {
 
 
-  deployer.deploy(_0xBitcoinToken);
+  return deployer.deploy(Token).then(function(){
+    console.log('deploy 1 ')
+
+      return deployer.deploy(RemoteCall).then(function(){
+          console.log('deploy 2 ')
+
+            return deployer.deploy(LavaWallet).then(function(){
+                console.log('deploy 3 ',  LavaWallet.address)
+                 return LavaWallet.deployed()
+          });
+
+       });
+  });
+
+ 
 
 
-
-
-  deployer.deploy(ECRecovery);
-
-
-    deployer.link(ECRecovery, LavaWallet)
-
-  deployer.deploy(LavaWallet);
 
 };
